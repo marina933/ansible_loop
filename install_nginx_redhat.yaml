@@ -1,0 +1,21 @@
+---
+- name: Install Nginx
+  hosts: workers
+  become: true
+  tasks:
+    - name: Install epel-release (for CentOS/RHEL systems)
+      yum:
+        name: epel-release
+        state: present
+      when: ansible_os_family == 'RedHat'
+
+    - name: Install Nginx
+      yum:
+        name: nginx
+        state: present
+      when: ansible_os_family == 'RedHat'
+
+    - name: Start Nginx service
+      service:
+        name: nginx
+        state: started
