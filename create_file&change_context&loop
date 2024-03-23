@@ -1,0 +1,31 @@
+---
+- name: Setup and configure Ubuntu hosts
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Create file with specific content in /tmp
+      copy:
+        content: |
+          1234456
+          789101112
+        dest: /tmp/file.txt
+
+    - name: Change the line in the file to "marina"
+      replace:
+        path: /tmp/file.txt
+        regexp: '^789101112$'
+        replace: 'marina'
+
+- name: Install Apache, MySQL, and other packages on Ubuntu hosts
+  hosts: ubuntu_servers
+  become: true
+  tasks:
+    - name: Install Apache, MySQL, and other packages using apt
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - apache2  # Apache HTTP Server
+        - mysql-server  # MySQL Server
+        - nodejs
+      when: ansible_os_family == "Debian"
