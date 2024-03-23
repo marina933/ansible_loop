@@ -1,0 +1,14 @@
+---
+- name: Remove installed packages from Ubuntu hosts
+  hosts: ubuntu_servers
+  become: true
+  tasks:
+    - name: Remove Apache, MySQL, and other packages using apt
+      apt:
+        name: "{{ item }}"
+        state: absent
+      loop:
+        - apache2  # Apache HTTP Server
+        - mysql-server  # MySQL Server
+        - nodejs
+      when: ansible_os_family == "Debian"
